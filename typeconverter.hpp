@@ -7,15 +7,15 @@
 
 // Output
 // Structure -> PyObject
-PyObject* Py2DList_FromPolygon(Polygon poly);
-PyObject* Py2DList_FromRectangle(Rectangle poly);
-PyObject* Py3DList_FromRectangles(std::vector<Rectangle> rects);
+PyObject* Py2DList_FromPolygon(Polygon& poly);
+PyObject* Py2DList_FromRectangle(Rectangle& poly);
+PyObject* Py3DList_FromRectangles(List<Rectangle>& rects);
 
 // Input
 // PyObject -> Structure
-int Point_FromPyList(PyObject* pypoint, Point* point);
-int Rectangle_FromPy2DList(PyObject* polyList, Rectangle* poly);
-int Polygon_FromPy2DList(PyObject* polyList, Polygon* poly);
-int PolyStructure_FromPyNDList(PyObject* ndlist, PolyStructure* polys);
+int Point_FromPyList(PyObject* pypoint, Point& point);
+int Rectangle_FromPy2DList(PyObject* polyList, Rectangle& poly);
+int Polygon_FromPy2DList(PyObject* polyList, Polygon& poly);
+int PolyStructure_FromPyNDList(PyObject* ndlist, PolyStructure& polys);
 
 #endif /* TYPECONVERTER_HPP */

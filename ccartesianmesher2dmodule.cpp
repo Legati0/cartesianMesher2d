@@ -17,12 +17,12 @@ PyObject* mesh(PyObject* self, PyObject* args) {
     }
     // convert input into a polygon
     Polygon poly;
-    if (!Polygon_FromPy2DList(polyList, &poly))
+    if (!Polygon_FromPy2DList(polyList, poly))
         return NULL;
     
-    std::vector<Rectangle> mesh;
+    List<Rectangle> mesh;
     // mesh
-    cMesh(&mesh, &poly, minArea);
+    cMesh(mesh, poly, minArea);
 
     return Py3DList_FromRectangles(mesh);
 }
@@ -36,11 +36,11 @@ PyObject* meshMore(PyObject* self, PyObject* args) {
     }
     // convert input into a PolyStructure
     PolyStructure polys;
-    if (!PolyStructure_FromPyNDList(list, &polys))
+    if (!PolyStructure_FromPyNDList(list, polys))
         return NULL;
-    std::vector<Rectangle> mesh;
+    List<Rectangle> mesh;
     // mesh
-    cMeshMore(&mesh, &polys, minArea);
+    cMeshMore(mesh, polys, minArea);
 
     return Py3DList_FromRectangles(mesh);
 }

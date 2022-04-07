@@ -3,9 +3,10 @@
 
 #include <vector>
 
+#define List std::vector
+#define Polygon List<Point>
+#define PolyStructure List<FHObject>
 
-#define Polygon std::vector<Point>
-#define PolyStructure std::vector<FHObject>
 
 struct Point {
 	double x;
@@ -32,7 +33,8 @@ struct Rectangle {
 
 struct FHObject {
 	Polygon face;
-	std::vector<Polygon> holes;
+	List<Polygon> holes;
 };
+
 
 #endif /* DEFINESHEADER_HPP */

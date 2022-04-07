@@ -1,7 +1,7 @@
 #include "typeconverter.hpp"
 
 
-PyObject* Py2DList_FromPolygon(Polygon poly) {
+PyObject* Py2DList_FromPolygon(Polygon& poly) {
 	PyObject* list = PyList_New(0);
 	if (list == NULL)
 		return NULL;
@@ -18,7 +18,7 @@ PyObject* Py2DList_FromPolygon(Polygon poly) {
 	return list;
 }
 
-PyObject* Py2DList_FromRectangle(Rectangle poly) {
+PyObject* Py2DList_FromRectangle(Rectangle& poly) {
 	PyObject* list = PyList_New(0);
 	if (list == NULL)
 		return NULL;
@@ -35,7 +35,7 @@ PyObject* Py2DList_FromRectangle(Rectangle poly) {
 	return list;
 }
 
-PyObject* Py3DList_FromRectangles(std::vector<Rectangle> rects) {
+PyObject* Py3DList_FromRectangles(List<Rectangle>& rects) {
 	PyObject* list = PyList_New(0);
 	if (list == NULL)
 		return NULL;
@@ -51,14 +51,14 @@ PyObject* Py3DList_FromRectangles(std::vector<Rectangle> rects) {
 
 //#####################################################################################
 
-int Point_FromPyList(PyObject* pypoint, Point* point) {
+int Point_FromPyList(PyObject* pypoint, Point& point) {
 	// Verify that each pypoint also a list
 	bool isList, isTuple;
 	isList = PyList_Check(pypoint);
 	isTuple = PyTuple_Check(pypoint);
 	if (!(isList || isTuple)) {
 		PyErr_SetString(PyExc_TypeError, "must pass in list of list or tuple");
-		return NULL;
+		return false;
 	}
 	int size = 0;
 	if (isList)
@@ -67,7 +67,7 @@ int Point_FromPyList(PyObject* pypoint, Point* point) {
 	    size = PyTuple_Size(pypoint);
 	if (size < 2) {
 		PyErr_SetString(PyExc_TypeError, "must pass in list of list of size >= 2, x and y are neccessary");
-		return NULL;
+		return false;
 	}
 	PyObject* xcoord;
 	PyObject* ycoord;
@@ -80,65 +80,65 @@ int Point_FromPyList(PyObject* pypoint, Point* point) {
 	}
 	// Check that xcoord is a long/double
 	if (PyLong_Check(xcoord)) {
-		point->x = (double) PyLong_AsLong(xcoord);
+		point.x = (double) PyLong_AsLong(xcoord);
 	} else if (PyFloat_Check(xcoord)) {
-		point->x = PyFloat_AsDouble(xcoord);
+		point.x = PyFloat_AsDouble(xcoord);
 	} else {
 		PyErr_SetString(PyExc_TypeError, "must pass in list of list of number (whole or floating point)");
-		return NULL;
+		return false;
 	}
 	// Check that ycoord is a long/double
 	if (PyLong_Check(ycoord)) {
-		point->y = (double) PyLong_AsLong(ycoord);
+		point.y = (double) PyLong_AsLong(ycoord);
 	} else if (PyFloat_Check(ycoord)) {
-		point->y = PyFloat_AsDouble(ycoord);
+		point.y = PyFloat_AsDouble(ycoord);
 	} else {
 		PyErr_SetString(PyExc_TypeError, "must pass in list of list of number (whole or floating point)");
-		return NULL;
+		return false;
 	}
 	return true;
 }
 
-int Rectangle_FromPy2DList(PyObject* polyList, Rectangle* poly) {
+int Rectangle_FromPy2DList(PyObject* polyList, Rectangle& poly) {
 	if (PyList_Size(polyList) != 4){
 		PyErr_SetString(PyExc_TypeError, "must pass in list of size 4");
-		return NULL;
+		return false;
 	}
 	PyObject* pypoint1 = PyList_GetItem(polyList, 0);
 	PyObject* pypoint2 = PyList_GetItem(polyList, 1);
 	PyObject* pypoint3 = PyList_GetItem(polyList, 2);
 	PyObject* pypoint4 = PyList_GetItem(polyList, 3);
 	Point p1, p2, p3, p4;
-	if (!(Point_FromPyList(pypoint1, &p1) && Point_FromPyList(pypoint2, &p2) && 
-			Point_FromPyList(pypoint3, &p3) && Point_FromPyList(pypoint4, &p4)))
-		return NULL;
+	if (!(Point_FromPyList(pypoint1, p1) && Point_FromPyList(pypoint2, p2) && 
+			Point_FromPyList(pypoint3, p3) && Point_FromPyList(pypoint4, p4)))
+		return false;
 
-	poly->points[0] = p1;
-	poly->points[1] = p2;
-	poly->points[2] = p3;
-	poly->points[3] = p4;
+	poly.points[0] = p1;
+	poly.points[1] = p2;
+	poly.points[2] = p3;
+	poly.points[3] = p4;
 	return true;
 }
 
-int Polygon_FromPy2DList(PyObject* polyList, Polygon* poly) {
+int Polygon_FromPy2DList(PyObject* polyList, Polygon& poly) {
 	for (int i = 0; i < PyList_Size(polyList); ++i) {
 		PyObject* pypoint = PyList_GetItem(polyList, i);
 		Point point;
-		if (!Point_FromPyList(pypoint, &point))
-			return NULL;
+		if (!Point_FromPyList(pypoint, point))
+			return false;
 
-		poly->push_back(point);
+		poly.push_back(point);
 	}
 	return true;
 }
 
-int PolyStructure_FromPyNDList(PyObject* ndlist, PolyStructure* polys) {
+int PolyStructure_FromPyNDList(PyObject* ndlist, PolyStructure& polys) {
 	for (int i = 0; i < PyList_Size(ndlist); i++) {
 		PyObject* fhList = PyList_GetItem(ndlist, i);
 		// first element is a polygon that represents a face
 		FHObject obj;
-		if (!Polygon_FromPy2DList(PyList_GetItem(fhList, 0), &obj.face)) {
-			return NULL;
+		if (!Polygon_FromPy2DList(PyList_GetItem(fhList, 0), obj.face)) {
+			return false;
 		}
 		// if there is another element
 		if (PyList_Size(fhList) > 1) {
@@ -146,13 +146,13 @@ int PolyStructure_FromPyNDList(PyObject* ndlist, PolyStructure* polys) {
 			PyObject* holesList = PyList_GetItem(fhList, 1);
 			for (int j = 0; j < PyList_Size(holesList); j++) {
 				Polygon hole;
-				if (!Polygon_FromPy2DList(PyList_GetItem(holesList, j), &hole)) {
-					return NULL;
+				if (!Polygon_FromPy2DList(PyList_GetItem(holesList, j), hole)) {
+					return false;
 				}
 				obj.holes.push_back(hole);
 			}
 		}
-		polys->push_back(obj);
+		polys.push_back(obj);
 	}
 	return true;
 }
