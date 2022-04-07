@@ -18,6 +18,16 @@ void cGetMinMax(Polygon& poly, double& minX, double& maxX, double& minY, double&
 	}
 }
 
+void cGetMinMax(Polygon& poly, Point& min, Point& max) {
+	for (auto& point : poly) {
+		min.x = std::min(min.x, point.x);
+		min.y = std::min(min.y, point.y);
+		max.x = std::max(max.x, point.x);
+		max.y = std::max(max.y, point.y);
+	}
+}
+
+
 bool cAreCollin(Point& a, Point& b, Point& c) {
 	double val = a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y);
 	double deciderVal = 0.000000001;

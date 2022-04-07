@@ -55,7 +55,7 @@ void cMesh(List<Rectangle>& mesh, Polygon& poly, double minArea) {
 	}
 
 }
-void cMeshFHObject(FHObject& obj, List<Rectangle>& mesh, double minArea) {
+void cMeshFHObject(List<Rectangle>& mesh, FHObject& obj, double minArea) {
 	double minX, maxX, minY, maxY;
 	cGetMinMax(obj.face, minX, maxX, minY, maxY);
 
@@ -121,6 +121,6 @@ void cMeshFHObject(FHObject& obj, List<Rectangle>& mesh, double minArea) {
 
 void cMeshMore(List<Rectangle>& mesh, PolyStructure& polys, double minArea) {
 	for (FHObject& fhO : polys) {
-		cMeshFHObject(fhO, mesh, minArea);
+		cMeshFHObject(mesh, fhO, minArea);
 	}
 }

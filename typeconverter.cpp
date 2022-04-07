@@ -51,7 +51,7 @@ PyObject* Py3DList_FromRectangles(List<Rectangle>& rects) {
 
 //#####################################################################################
 
-int Point_FromPyList(PyObject* pypoint, Point& point) {
+bool Point_FromPyList(PyObject* pypoint, Point& point) {
 	// Verify that each pypoint also a list
 	bool isList, isTuple;
 	isList = PyList_Check(pypoint);
@@ -99,7 +99,7 @@ int Point_FromPyList(PyObject* pypoint, Point& point) {
 	return true;
 }
 
-int Rectangle_FromPy2DList(PyObject* polyList, Rectangle& poly) {
+bool Rectangle_FromPy2DList(PyObject* polyList, Rectangle& poly) {
 	if (PyList_Size(polyList) != 4){
 		PyErr_SetString(PyExc_TypeError, "must pass in list of size 4");
 		return false;
@@ -120,7 +120,7 @@ int Rectangle_FromPy2DList(PyObject* polyList, Rectangle& poly) {
 	return true;
 }
 
-int Polygon_FromPy2DList(PyObject* polyList, Polygon& poly) {
+bool Polygon_FromPy2DList(PyObject* polyList, Polygon& poly) {
 	for (int i = 0; i < PyList_Size(polyList); ++i) {
 		PyObject* pypoint = PyList_GetItem(polyList, i);
 		Point point;
@@ -132,7 +132,7 @@ int Polygon_FromPy2DList(PyObject* polyList, Polygon& poly) {
 	return true;
 }
 
-int PolyStructure_FromPyNDList(PyObject* ndlist, PolyStructure& polys) {
+bool PolyStructure_FromPyNDList(PyObject* ndlist, PolyStructure& polys) {
 	for (int i = 0; i < PyList_Size(ndlist); i++) {
 		PyObject* fhList = PyList_GetItem(ndlist, i);
 		// first element is a polygon that represents a face
