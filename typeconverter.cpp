@@ -1,7 +1,7 @@
 #include "typeconverter.hpp"
 
 
-PyObject* Py2DList_FromPolygon(Polygon& poly) {
+PyObject* Py2DList_FromPolygon(const Polygon& poly) {
 	PyObject* list = PyList_New(0);
 	if (list == NULL)
 		return NULL;
@@ -18,7 +18,7 @@ PyObject* Py2DList_FromPolygon(Polygon& poly) {
 	return list;
 }
 
-PyObject* Py2DList_FromRectangle(Rectangle& poly) {
+PyObject* Py2DList_FromRectangle(const Rectangle& poly) {
 	PyObject* list = PyList_New(0);
 	if (list == NULL)
 		return NULL;
@@ -35,7 +35,7 @@ PyObject* Py2DList_FromRectangle(Rectangle& poly) {
 	return list;
 }
 
-PyObject* Py3DList_FromRectangles(List<Rectangle>& rects) {
+PyObject* Py3DList_FromRectangles(const List<Rectangle>& rects) {
 	PyObject* list = PyList_New(0);
 	if (list == NULL)
 		return NULL;

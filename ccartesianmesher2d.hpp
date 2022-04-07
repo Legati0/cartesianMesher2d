@@ -11,21 +11,21 @@
  * @param poly the Polygon to mesh
  * @param minArea all rectangles are bigger than this size
  */
-void cMesh(List<Rectangle>& mesh, Polygon& poly, double minArea);
+void cMesh(List<Rectangle>& mesh, const Polygon& poly, double minArea);
 /**
  * creates a mesh from a polygon
  * @param poly the return mesh
  * @param obj face-hole object to mesh
  * @param minArea all rectangles are bigger than this size
  */
-void cMeshFHObject(List<Rectangle>& mesh, FHObject& obj, double minArea);
+void cMeshFHObject(List<Rectangle>& mesh, const FHObject& obj, double minArea);
 /**
  * creates a mesh from a polygon
  * @param mesh the return mesh
  * @param poly PolyStructure to mesh
  * @param minArea all rectangles are bigger than this size
  */
-void cMeshMore(List<Rectangle>& mesh, PolyStructure& poly, double minArea);
+void cMeshMore(List<Rectangle>& mesh, const PolyStructure& poly, double minArea);
 
 
 #endif /* CCARTESIANMESHER2D_HPP */

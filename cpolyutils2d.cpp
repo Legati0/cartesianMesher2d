@@ -5,7 +5,7 @@
 #include <math.h>
 #include <cmath>
 
-void cGetMinMax(Polygon& poly, double& minX, double& maxX, double& minY, double& maxY) {
+void cGetMinMax(const Polygon& poly, double& minX, double& maxX, double& minY, double& maxY) {
 	minX = poly.at(0).x;
 	maxX = poly.at(0).x;
 	minY = poly.at(0).y;
@@ -18,7 +18,7 @@ void cGetMinMax(Polygon& poly, double& minX, double& maxX, double& minY, double&
 	}
 }
 
-void cGetMinMax(Polygon& poly, Point& min, Point& max) {
+void cGetMinMax(const Polygon& poly, Point& min, Point& max) {
 	for (auto& point : poly) {
 		min.x = std::min(min.x, point.x);
 		min.y = std::min(min.y, point.y);
@@ -28,13 +28,13 @@ void cGetMinMax(Polygon& poly, Point& min, Point& max) {
 }
 
 
-bool cAreCollin(Point& a, Point& b, Point& c) {
+bool cAreCollin(const Point& a, const Point& b, const Point& c) {
 	double val = a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y);
 	double deciderVal = 0.000000001;
 	return val < deciderVal && val > -deciderVal;
 }
 
-double cArea(Polygon& poly, bool absv) {
+double cArea(const Polygon& poly, bool absv) {
 	double area = 0;
 	int j = poly.size() - 1;
 	unsigned int i = 0;
@@ -48,7 +48,7 @@ double cArea(Polygon& poly, bool absv) {
 	return area / 2;
 }
 
-bool cIsClockwise(Polygon& poly) {
+bool cIsClockwise(const Polygon& poly) {
 	return cArea(poly, false) > 0;
 }
 
@@ -63,7 +63,7 @@ void cToAntiClockwise(Polygon& poly) {
 }
 
 // https://stackoverflow.com/questions/14066933/direct-way-of-computing-clockwise-angle-between-2-vectors
-double cAngle(Point& a, Point& b) {
+double cAngle(const Point& a, const Point& b) {
 	double dot = a.x * b.x + a.y * b.y;
 	double det = a.x * b.y - a.y * b.x;
 	double angle = std::atan2(det, dot);
@@ -73,7 +73,7 @@ double cAngle(Point& a, Point& b) {
 		return angle + 2 * M_PI; 
 }
 
-void cRotatePoint(Point& p, Point& o, double angle) {
+void cRotatePoint(Point& p, const Point& o, double angle) {
 	const double s = sin(angle);
 	const double c = cos(angle);
 
@@ -87,13 +87,13 @@ void cRotatePoint(Point& p, Point& o, double angle) {
 	p.y = nY + o.y;
 }
 
-bool cIsPointOnLine(Point& p, Point& l1, Point& l2) {
+bool cIsPointOnLine(const Point& p, const Point& l1, const Point& l2) {
 	return (p.x >= std::min(l1.x, l2.x)) && (p.x <= std::max(l1.x, l2.x)) &&
 			(p.y >= std::min(l1.y, l2.y)) && (p.y <= std::max(l1.y, l2.y)) &&
 			cAreCollin(p, l1, l2);
 }
 
-bool cIsPointInPoly(Point& p, Polygon& poly) {
+bool cIsPointInPoly(const Point& p, const Polygon& poly) {
 	int nvert = poly.size();
 	bool c = false;
 	for (int i = 0, j = nvert - 1; i < nvert; j = i++) {
@@ -106,7 +106,7 @@ bool cIsPointInPoly(Point& p, Polygon& poly) {
 	return c;
 }
 
-int cIsPointInOnOutPoly(Point& p, Polygon& poly) {
+int cIsPointInOnOutPoly(const Point& p, const Polygon& poly) {
 	int nvert = poly.size();
 	bool c = false;
 	for (int i = 0, j = nvert - 1; i < nvert; j = i++) {
@@ -123,7 +123,7 @@ int cIsPointInOnOutPoly(Point& p, Polygon& poly) {
 	return -1;
 }
 
-bool cFindLineIntersection(Point& p1, Point& p2, Point& q1, Point& q2, Point& res) {
+bool cFindLineIntersection(const Point& p1, const Point& p2, const Point& q1, const Point& q2, Point& res) {
 	const double s1X = p2.x - p1.x;
 	const double s1Y = p2.y - p1.y;
 	const double s2X = q2.x - q1.x;
@@ -145,7 +145,7 @@ bool cFindLineIntersection(Point& p1, Point& p2, Point& q1, Point& q2, Point& re
 	return false;
 }
 
-void cFindIntersections(Polygon& polyA, Polygon& polyB, Polygon& intersections) {
+void cFindIntersections(const Polygon& polyA, const Polygon& polyB, Polygon& intersections) {
 	int anvert = polyA.size();
 	int bnvert = polyB.size();
 	for (int ai = 0, aj = anvert - 1; ai < anvert; aj = ai++) {
@@ -159,7 +159,7 @@ void cFindIntersections(Polygon& polyA, Polygon& polyB, Polygon& intersections) 
 	}
 }
 
-int cIsPolyInCutOutPoly(Polygon& polyA, Polygon& polyB) {
+int cIsPolyInCutOutPoly(const Polygon& polyA, const Polygon& polyB) {
 	// is a in b?
 	// 1 inside, -1 outside, 0 cut
 	Polygon intersections;
@@ -217,7 +217,7 @@ int cIsPolyInCutOutPoly(Polygon& polyA, Polygon& polyB) {
 	return 1;
 }
 
-int cIsPolyInCutOutPoly(Rectangle& polyA, Polygon& polyB) {
+int cIsPolyInCutOutPoly(const Rectangle& polyA, const Polygon& polyB) {
 	Polygon p;
 	for (unsigned int i = 0; i < polyA.size; i++) {
 		p.push_back(polyA.points[i]);
@@ -225,7 +225,7 @@ int cIsPolyInCutOutPoly(Rectangle& polyA, Polygon& polyB) {
 	return cIsPolyInCutOutPoly(p, polyB);
 }
 
-void cSplitRectInNxM(Rectangle& rect, List<Rectangle>& rects, double minArea, long n, long m) {
+void cSplitRectInNxM(const Rectangle& rect, List<Rectangle>& rects, double minArea, long n, long m) {
 	if (m < 0)
 		m = n;
 

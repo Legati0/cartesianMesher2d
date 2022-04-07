@@ -13,19 +13,19 @@
  * @param poly the polygon that should be converted
  * @return the Py2DList
  */
-PyObject* Py2DList_FromPolygon(Polygon& poly);
+PyObject* Py2DList_FromPolygon(const Polygon& poly);
 /**
  * Converts a Rectangle to a Py2DList
  * @param poly the Rectangle that should be converted
  * @return the Py2DList
  */
-PyObject* Py2DList_FromRectangle(Rectangle& poly);
+PyObject* Py2DList_FromRectangle(const Rectangle& poly);
 /**
  * Converts a List of rectangles to a Py2DList
  * @param rects the List of rectangles that should be converted
  * @return the Py2DList
  */
-PyObject* Py3DList_FromRectangles(List<Rectangle>& rects);
+PyObject* Py3DList_FromRectangles(const List<Rectangle>& rects);
 
 
 // Input
@@ -36,7 +36,7 @@ PyObject* Py3DList_FromRectangles(List<Rectangle>& rects);
  * @param point the result Point
  * @return whether or not the converion was successful
  */
-bool Point_FromPyList(PyObject* pypoint, Point& point);
+bool Point_FromPyList(const PyObject* pypoint, Point& point);
 /**
  * converts a Py2DList to a Rectangle
  * @param polyList the Py2DList

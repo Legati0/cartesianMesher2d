@@ -4,7 +4,7 @@
 #include<algorithm> // for copy.
 #include<iterator> // for back_inserter
 
-void cMesh(List<Rectangle>& mesh, Polygon& poly, double minArea) {
+void cMesh(List<Rectangle>& mesh, const Polygon& poly, double minArea) {
 	double minX, maxX, minY, maxY;
 	cGetMinMax(poly, minX, maxX, minY, maxY);
 
@@ -55,7 +55,7 @@ void cMesh(List<Rectangle>& mesh, Polygon& poly, double minArea) {
 	}
 
 }
-void cMeshFHObject(List<Rectangle>& mesh, FHObject& obj, double minArea) {
+void cMeshFHObject(List<Rectangle>& mesh, const FHObject& obj, double minArea) {
 	double minX, maxX, minY, maxY;
 	cGetMinMax(obj.face, minX, maxX, minY, maxY);
 
@@ -119,8 +119,8 @@ void cMeshFHObject(List<Rectangle>& mesh, FHObject& obj, double minArea) {
 	}
 }
 
-void cMeshMore(List<Rectangle>& mesh, PolyStructure& polys, double minArea) {
-	for (FHObject& fhO : polys) {
+void cMeshMore(List<Rectangle>& mesh, const PolyStructure& polys, double minArea) {
+	for (const FHObject& fhO : polys) {
 		cMeshFHObject(mesh, fhO, minArea);
 	}
 }

@@ -13,8 +13,7 @@ struct Point {
 	double y;
 	Point() : x(0.0), y(0.0) {}
 	Point(double _x, double _y) : x(_x), y(_y) {}
-	bool operator==(const Point other)
-	{
+	bool operator==(const Point other) const {
 	    return x == other.x && y == other.y;
 	}
 };
@@ -22,8 +21,7 @@ struct Point {
 struct Rectangle {
 	Point points[4];
 	unsigned int size = 4;
-	bool operator==(const Rectangle other)
-	{
+	bool operator==(const Rectangle other) const {
 	    for (unsigned int i = 0; i < size; i++)
 	    	if (!(points[i] == other.points[i]))
 	    		return false;
